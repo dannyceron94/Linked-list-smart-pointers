@@ -1,5 +1,4 @@
 //	Include.h
-// up
 #include<iostream>
 #include<string>
 #include"LinkedBag.h"

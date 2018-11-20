@@ -1,5 +1,5 @@
 //	LinkedBag340.cpp
-//	Created by: Danny Ceron
+//	Updated by Danny Ceron
 #include"LinkedBag.h"
 #include<iostream>
 #include<string>
