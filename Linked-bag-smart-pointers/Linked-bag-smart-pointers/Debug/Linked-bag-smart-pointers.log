@@ -1,2 +1,9 @@
 ﻿  LinkedBag.cpp
-  Linked-bag-smart-pointers.vcxproj -> C:\Users\zero\source\repos\Linked-bag-smart-pointers\Debug\Linked-bag-smart-pointers.exe
+c1xx : fatal error C1083: Cannot open source file: 'LinkedBag.cpp': No such file or directory
+  LinkedBag340.cpp
+c1xx : fatal error C1083: Cannot open source file: 'LinkedBag340.cpp': No such file or directory
+  LinkedBagClient340.cpp
+c1xx : fatal error C1083: Cannot open source file: 'LinkedBagClient340.cpp': No such file or directory
+  Node.cpp
+c1xx : fatal error C1083: Cannot open source file: 'Node.cpp': No such file or directory
+  Generating Code...

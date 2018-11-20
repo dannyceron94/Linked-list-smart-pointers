@@ -1,6 +1,7 @@
 //  LinkedBag.cpp
 //  Created by Frank M. Carrano and Timothy M. Henry.
 //	Updated by Duc Ta
+//  Updated by Danny
 //  Copyright (c) 2017 Pearson Education, Hoboken, New Jersey.
 
 #include <cstddef>
