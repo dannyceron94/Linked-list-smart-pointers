@@ -17,17 +17,19 @@ class Node {
 public:
 	Node();
 	Node(const ItemType&);
-	Node(const ItemType&, Node<ItemType>*);
-	//Node(const ItemType&, std::shared_ptr<Node<ItemType>>);
+	//Node(const ItemType&, Node<ItemType>*);
+	Node(const ItemType&, std::unique_ptr<Node<ItemType>>);
 	void setItem(const ItemType&);
-	void setNext(Node<ItemType>*);
+	//void setNext(Node<ItemType>*);
+	void setNext(const std::shared_ptr <Node<ItemType>>);
 	//void setNext(std::shared_ptr<Node<ItemType>>);//added
 	ItemType getItem() const;
-	Node<ItemType>* getNext() const;
-	//std::shared_ptr<Node<ItemType>> getNext() const;//added
+	//Node<ItemType>* getNext() const;
+	std::shared_ptr<Node<ItemType>> getNext() const;//added
 
 private:
 	ItemType        item;			 // A data item
-	Node<ItemType>* next{ nullptr }; // Pointer to next node
+	//Node<ItemType>* next{ nullptr }; // Pointer to next node
+	std::shared_ptr<Node<ItemType>> next{ nullptr };
 	//std::shared_ptr<Node<ItemType>> next;//added
 };

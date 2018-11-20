@@ -15,7 +15,7 @@ template<typename ItemType>
 bool LinkedBag<ItemType>::removeSecondNode340() 
 {
 	bool statement = false;
-	std::unique_ptr<Node<ItemType>> pointerToDelete{ headPtr };
+	std::shared_ptr<Node<ItemType>> pointerToDelete{ headPtr };
 	headPtr = headPtr->getNext();
 
 	if (headPtr!= nullptr)
@@ -31,8 +31,9 @@ bool LinkedBag<ItemType>::removeSecondNode340()
 template<typename ItemType>
 bool  LinkedBag<ItemType>::addEnd340(const ItemType& item)
 {
-	Node<ItemType>* lastNode = headPtr;
-	std::unique_ptr<Node<ItemType>> pointerToDelete = std::make_unique <Node<ItemType>>();
+	//Node<ItemType>* lastNode = headPtr;
+	std::shared_ptr<Node<ItemType>> lastNode{ headPtr};
+	std::shared_ptr<Node<ItemType>> pointerToDelete = std::make_unique<Node<ItemType>>();
 	
 	while (lastNode->getNext() != nullptr)
 	{
@@ -40,7 +41,7 @@ bool  LinkedBag<ItemType>::addEnd340(const ItemType& item)
 	}
 	pointerToDelete->setItem(item);
 
-	lastNode->setNext(pointerToDelete.release());
+	lastNode->setNext(pointerToDelete);
 	itemCount++;
 
 	return true;
@@ -51,8 +52,8 @@ template<typename ItemType>
 int LinkedBag<ItemType>::getCurrentSize340Iterative() const
 {
 	int bagsize = 0;
-	Node<ItemType>* current = headPtr;
-	//std::unique_ptr<Node<ItemType>> current{ headPtr };
+	//Node<ItemType>* current = headPtr;
+	std::shared_ptr<Node<ItemType>> current{ headPtr };
 	while ((current != nullptr)&&(bagsize<itemCount))
 	{
 		bagsize++;
@@ -65,7 +66,7 @@ int LinkedBag<ItemType>::getCurrentSize340Iterative() const
 template<typename ItemType>
 int LinkedBag<ItemType>::getCurrentSize340Recursive() const
 {
-	Node<ItemType>* current = headPtr;
+	const std::shared_ptr<Node<ItemType>>current{ headPtr };
 	return getCurrentSize340RecursiveHelper(current);
 }
 
@@ -83,7 +84,8 @@ int LinkedBag<ItemType>::getCurrentSize340RecursiveNoHelper() const
 template<typename ItemType>
  int LinkedBag<ItemType> :: getFrequencyOf340Recursive(const ItemType& itemName) const
 {
-	 Node<ItemType>* current = headPtr;
+	 //Node<ItemType>* current = headPtr;
+	 std::shared_ptr<Node<ItemType>> current{ headPtr };
 	 return getFrequencyOf340RecursiveHelper(current,itemName);
 }
 
@@ -115,9 +117,10 @@ ItemType LinkedBag<ItemType> :: removeRandom340()
 }
 
 template<typename ItemType>
-int LinkedBag<ItemType>::getCurrentSize340RecursiveHelper(Node<ItemType>* node)const
+int LinkedBag<ItemType>::getCurrentSize340RecursiveHelper(const std::shared_ptr<Node<ItemType>>& node)const
 {
-	Node<ItemType>* current = node;
+	//Node<ItemType>* current = node;
+	std::shared_ptr <Node<ItemType>> current{ node };
 	if (current->getNext() == nullptr) { return 1; }//check to see if the next node is a node. to not over count. ;D
 	else
 	{
@@ -125,17 +128,18 @@ int LinkedBag<ItemType>::getCurrentSize340RecursiveHelper(Node<ItemType>* node)c
 	}
 }
 template<typename ItemType>
-int LinkedBag<ItemType>::getFrequencyOf340RecursiveHelper(Node<ItemType>* node, const ItemType& itemInbag) const
+int LinkedBag<ItemType>::getFrequencyOf340RecursiveHelper(const std::shared_ptr<Node<ItemType>>& node, const ItemType& itemInbag) const
 {
-	Node<ItemType>* current = node;
+	//Node<ItemType>* current = node;
+	std::shared_ptr <Node<ItemType>> current{node};
 	if (current == nullptr) { return 0; }
 	else if(current->getItem() == itemInbag)
 	{
-		return 1 + getFrequencyOf340RecursiveHelper(current->getNext(), itemInbag);
+		return 1 + getFrequencyOf340RecursiveHelper(current->getNext(), itemInbag);//
 	}
 	else
 	{
-		return getFrequencyOf340RecursiveHelper(current->getNext(), itemInbag);
+		return getFrequencyOf340RecursiveHelper(current->getNext(), itemInbag);//
 	}
 	return 0;
 }//very needed

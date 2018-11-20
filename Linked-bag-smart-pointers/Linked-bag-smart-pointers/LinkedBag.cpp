@@ -20,24 +20,27 @@ LinkedBag<ItemType>::LinkedBag() : headPtr(nullptr), itemCount(0) {}
 template<typename ItemType>
 LinkedBag<ItemType>::LinkedBag(const LinkedBag<ItemType>& aBag) {
 	itemCount = aBag.itemCount;
-	Node<ItemType>* origChainPtr = aBag.headPtr;
-	//std::shared_ptr<Node<ItemType>>origChainPtr = aBag.headPtr;//added
+	//Node<ItemType>* origChainPtr = aBag.headPtr;
+	std::unique_ptr<Node<ItemType>>origChainPtr = aBag.headPtr;//added
 
 	if (origChainPtr == nullptr) {
 		headPtr = nullptr; 
 	}
 	else {
-		headPtr = new Node<ItemType>();
-		//std::shared_ptr<Node<ItemType>> headPtr{std::make_shared<Node<ItemType>>()};//added
+		//headPtr = new Node<ItemType>();
+		std::unique_ptr<Node<ItemType>> headPtr{std::make_unique<Node<ItemType>>()};//added
 		headPtr->setItem(origChainPtr->getItem());
 
-		Node<ItemType>* newChainPtr = headPtr; 
+		//Node<ItemType>* newChainPtr = headPtr; 
+		std::unique_ptr<Node<ItemType>>newChainPtr{ headPtr };
 		origChainPtr = origChainPtr->getNext();
 
 		while (origChainPtr != nullptr)
 		{
 			ItemType nextItem = origChainPtr->getItem();
-			Node<ItemType>* newNodePtr = new Node<ItemType>(nextItem);
+			//Node<ItemType>* newNodePtr = new Node<ItemType>(nextItem);
+			std::unique_ptr<Node<ItemType>>newNodePtr = std::make_unique<Node<ItemType>>(nextItem);
+
 			newChainPtr->setNext(newNodePtr);
 			newChainPtr = newChainPtr->getNext();
 			origChainPtr = origChainPtr->getNext();
@@ -64,12 +67,12 @@ int LinkedBag<ItemType>::getCurrentSize() const {
 
 template<typename ItemType>
 bool LinkedBag<ItemType>::add(const ItemType& newEntry) {
-	Node<ItemType>* nextNodePtr = new Node<ItemType>();//changes
-	//std::shared_ptr<Node<ItemType>>nextNodePtr{ new Node<ItemType>() };//added
+	//Node<ItemType>* nextNodePtr = new Node<ItemType>();//changes
+	std::unique_ptr<Node<ItemType>>nextNodePtr{ new Node<ItemType>() };//added
 
 	nextNodePtr->setItem(newEntry);
 	nextNodePtr->setNext(headPtr);  
-	headPtr = nextNodePtr;
+	headPtr = move(nextNodePtr);
 	itemCount++;
 	return true;
 }
@@ -77,7 +80,8 @@ bool LinkedBag<ItemType>::add(const ItemType& newEntry) {
 template<typename ItemType>
 std::vector<ItemType> LinkedBag<ItemType>::toVector() const {
 	std::vector<ItemType> bagContents;
-	Node<ItemType>* curPtr = headPtr;
+	//Node<ItemType>* curPtr = headPtr;
+	std::shared_ptr<Node<ItemType>> curPtr = headPtr;
 	int counter = 0;
 
 	while ((curPtr != nullptr) && (counter < itemCount)) {
@@ -91,17 +95,19 @@ std::vector<ItemType> LinkedBag<ItemType>::toVector() const {
 
 template<typename ItemType>
 bool LinkedBag<ItemType>::remove(const ItemType& anEntry) {
-	Node<ItemType>* entryNodePtr = getPointerTo(anEntry);
+	/*Node<ItemType>* entryNodePtr = getPointerTo(anEntry);*/
+	std::shared_ptr<Node<ItemType>> entryNodePtr = getPointerTo(anEntry);
 	bool canRemoveItem = !isEmpty() && (entryNodePtr != nullptr);
 
 	if (canRemoveItem) {
 		entryNodePtr->setItem(headPtr->getItem());
-		Node<ItemType>* nodeToDeletePtr = headPtr;
+		//Node<ItemType>* nodeToDeletePtr = headPtr;
+		std::shared_ptr<Node<ItemType>>nodeToDeletePtr{ headPtr };
 		headPtr = headPtr->getNext();
 
 		nodeToDeletePtr->setNext(nullptr);
-		delete nodeToDeletePtr;
-		nodeToDeletePtr = nullptr;
+		//delete nodeToDeletePtr;
+		//nodeToDeletePtr = nullptr;
 
 		itemCount--;
 	}
@@ -111,12 +117,14 @@ bool LinkedBag<ItemType>::remove(const ItemType& anEntry) {
 
 template<typename ItemType>
 void LinkedBag<ItemType>::clear() {
-	Node<ItemType>* nodeToDeletePtr = headPtr;
+	//Node<ItemType>* nodeToDeletePtr = headPtr;
+	std::shared_ptr<Node<ItemType>>nodeToDeletePtr{ headPtr };
 
 	while (headPtr != nullptr) {
 		headPtr = headPtr->getNext();
 		nodeToDeletePtr->setNext(nullptr);
-		delete nodeToDeletePtr;
+		//delete nodeToDeletePtr;
+		nodeToDeletePtr.reset();
 		nodeToDeletePtr = headPtr;
 	}
 
@@ -127,7 +135,8 @@ template<typename ItemType>
 int LinkedBag<ItemType>::getFrequencyOf(const ItemType& anEntry) const {
 	int frequency = 0;
 	int counter = 0;
-	Node<ItemType>* curPtr = headPtr;
+	//Node<ItemType>* curPtr = headPtr;
+	std::shared_ptr<Node<ItemType>> curPtr;
 
 	while ((curPtr != nullptr) && (counter < itemCount)) {
 		if (anEntry == curPtr->getItem()) {
@@ -145,10 +154,28 @@ bool LinkedBag<ItemType>::contains(const ItemType& anEntry) const {
 	return (getPointerTo(anEntry) != nullptr);
 }
 
+//template<typename ItemType>
+//Node<ItemType>* LinkedBag<ItemType>::getPointerTo(const ItemType& anEntry) const {
+//	bool found = false;
+//	//Node<ItemType>* curPtr = headPtr;
+//	std::shared_ptr<Node<ItemType>> curPtr{ headPtr };
+//
+//	while (!found && (curPtr != nullptr)) {
+//		if (anEntry == curPtr->getItem()) {
+//			found = true;
+//		}
+//		else {
+//			curPtr = curPtr->getNext();
+//		}
+//	}
+//
+//	return curPtr;
+//} 
 template<typename ItemType>
-Node<ItemType>* LinkedBag<ItemType>::getPointerTo(const ItemType& anEntry) const {
+std::shared_ptr<Node<ItemType>> LinkedBag<ItemType>::getPointerTo(const ItemType& anEntry) const {
 	bool found = false;
-	Node<ItemType>* curPtr = headPtr;
+	//Node<ItemType>* curPtr = headPtr;
+	std::shared_ptr<Node<ItemType>> curPtr{ headPtr };
 
 	while (!found && (curPtr != nullptr)) {
 		if (anEntry == curPtr->getItem()) {
@@ -160,4 +187,4 @@ Node<ItemType>* LinkedBag<ItemType>::getPointerTo(const ItemType& anEntry) const
 	}
 
 	return curPtr;
-} 
+}

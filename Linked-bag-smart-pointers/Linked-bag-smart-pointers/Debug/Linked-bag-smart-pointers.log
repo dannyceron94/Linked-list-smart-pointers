@@ -1,8 +1,2 @@
 ﻿  LinkedBag.cpp
-  LinkedBag340.cpp
-c:\users\zero\source\repos\linked-bag-smart-pointers\linked-bag-smart-pointers\linkedbag340.cpp(107): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  LinkedBagClient340.cpp
-c:\users\zero\source\repos\linked-bag-smart-pointers\linked-bag-smart-pointers\linkedbag340.cpp(107): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Node.cpp
-  Generating Code...
   Linked-bag-smart-pointers.vcxproj -> C:\Users\zero\source\repos\Linked-bag-smart-pointers\Debug\Linked-bag-smart-pointers.exe
